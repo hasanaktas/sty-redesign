@@ -1,93 +1,86 @@
 import React from 'react';
-import { Switch, Redirect } from 'react-router-dom';
+import { lazy } from 'react';
+import { Redirect } from 'react-router-dom';
+import { Main as MainLayout, Auth as AuthLayout } from 'layouts';
 
-import { RouteWithLayout } from './components';
-import { Main as MainLayout, Minimal as MinimalLayout } from './layouts';
+const AuthRoutes = [
+  {
+    path: '/auth',
+    component: AuthLayout,
+    routes: [
+      {
+        path: '/auth/login',
+        exact: true,
+        component: lazy(() => import('views/Login')),
+      },
+    ],
+  },
+];
+const HomeRoutes = [
+  {
+    route: '/',
+    component: MainLayout,
+    routes: [
+      {
+        path: '/anasayfa',
+        exact: true,
+        component: lazy(() => import('views/Home')),
+      },
+      {
+        path: '/puantaj',
+        exact: true,
+        component: lazy(() => import('views/Puantaj')),
+      },
+      {
+        path: '/tanimlar/kurum-islemleri',
+        exact: true,
+        component: lazy(() => import('views/KurumIslemleri')),
+      },
+      {
+        path: '/personelkarti/kisikarti',
+        exact: true,
+        component: lazy(() => import('views/PersonelKarti/KisiKarti')),
+      },
+      {
+        path: '/kisi/',
+        exact: true,
+        component: lazy(() => import('views/Kisi')),
+      },
+      {
+        path: '/kisi/:id',
+        exact: true,
+        component: lazy(() => import('views/Kisi')),
+      },
+      {
+        path: '/kisi/:id/:tab',
+        exact: true,
+        component: lazy(() => import('views/Kisi')),
+      },
+    ],
+  },
+];
 
-import {
-  Dashboard as DashboardView,
-  ProductList as ProductListView,
-  UserList as UserListView,
-  Typography as TypographyView,
-  Icons as IconsView,
-  Account as AccountView,
-  Settings as SettingsView,
-  SignUp as SignUpView,
-  SignIn as SignInView,
-  NotFound as NotFoundView
-} from './views';
-
-const Routes = () => {
-  return (
-    <Switch>
-      <Redirect
-        exact
-        from="/"
-        to="/dashboard"
-      />
-      <RouteWithLayout
-        component={DashboardView}
-        exact
-        layout={MainLayout}
-        path="/dashboard"
-      />
-      <RouteWithLayout
-        component={UserListView}
-        exact
-        layout={MainLayout}
-        path="/users"
-      />
-      <RouteWithLayout
-        component={ProductListView}
-        exact
-        layout={MainLayout}
-        path="/products"
-      />
-      <RouteWithLayout
-        component={TypographyView}
-        exact
-        layout={MainLayout}
-        path="/typography"
-      />
-      <RouteWithLayout
-        component={IconsView}
-        exact
-        layout={MainLayout}
-        path="/icons"
-      />
-      <RouteWithLayout
-        component={AccountView}
-        exact
-        layout={MainLayout}
-        path="/account"
-      />
-      <RouteWithLayout
-        component={SettingsView}
-        exact
-        layout={MainLayout}
-        path="/settings"
-      />
-      <RouteWithLayout
-        component={SignUpView}
-        exact
-        layout={MinimalLayout}
-        path="/sign-up"
-      />
-      <RouteWithLayout
-        component={SignInView}
-        exact
-        layout={MinimalLayout}
-        path="/sign-in"
-      />
-      <RouteWithLayout
-        component={NotFoundView}
-        exact
-        layout={MinimalLayout}
-        path="/not-found"
-      />
-      <Redirect to="/not-found" />
-    </Switch>
-  );
+const routes = logged => {
+  console.log(logged);
+  if (logged) {
+    return [
+      {
+        path: '/',
+        exact: true,
+        component: () => <Redirect to="/anasayfa" />,
+      },
+      ...HomeRoutes,
+    ];
+  } else {
+    return [
+      {
+        path: '/',
+        exact: true,
+        component: () => <Redirect to="/auth/logins" />,
+      },
+      ...AuthRoutes,
+    ];
+  }
 };
 
-export default Routes;
+export default routes;

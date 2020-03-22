@@ -1,71 +1,75 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/styles';
-import { useMediaQuery } from '@material-ui/core';
+import React, { Suspense, useState } from 'react'
+import PropTypes from 'prop-types'
+import { LinearProgress, makeStyles } from '@material-ui/core'
 
-import { Sidebar, Topbar, Footer } from './components';
+import { NavBar, TopBar } from './components'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   root: {
-    paddingTop: 56,
-    height: '100%',
-    [theme.breakpoints.up('sm')]: {
-      paddingTop: 64
-    }
+    height: '100vh',
+    width: '100vw',
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
   },
-  shiftContent: {
-    paddingLeft: 240
+  topBar: {
+    zIndex: 2,
+    position: 'relative',
+  },
+  container: {
+    display: 'flex',
+    flex: '1 1 auto',
+    overflow: 'hidden',
+  },
+  navBar: {
+    zIndex: 3,
+    width: 256,
+    minWidth: 256,
+    flex: '0 0 auto',
   },
   content: {
-    height: '100%'
+    overflowY: 'auto',
+    flex: '1 1 auto',
+    padding: 20,
+  },
+}))
+
+const Dashboard = props => {
+  const { children } = props
+
+  const classes = useStyles()
+  const [openNavBarMobile, setOpenNavBarMobile] = useState(false)
+
+  const handleNavBarMobileOpen = () => {
+    setOpenNavBarMobile(true)
   }
-}));
 
-const Main = props => {
-  const { children } = props;
-
-  const classes = useStyles();
-  const theme = useTheme();
-  const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
-    defaultMatches: true
-  });
-
-  const [openSidebar, setOpenSidebar] = useState(false);
-
-  const handleSidebarOpen = () => {
-    setOpenSidebar(true);
-  };
-
-  const handleSidebarClose = () => {
-    setOpenSidebar(false);
-  };
-
-  const shouldOpenSidebar = isDesktop ? true : openSidebar;
+  const handleNavBarMobileClose = () => {
+    setOpenNavBarMobile(false)
+  }
 
   return (
-    <div
-      className={clsx({
-        [classes.root]: true,
-        [classes.shiftContent]: isDesktop
-      })}
-    >
-      <Topbar onSidebarOpen={handleSidebarOpen} />
-      <Sidebar
-        onClose={handleSidebarClose}
-        open={shouldOpenSidebar}
-        variant={isDesktop ? 'persistent' : 'temporary'}
+    <div className={classes.root}>
+      <TopBar
+        className={classes.topBar}
+        onOpenNavBarMobile={handleNavBarMobileOpen}
       />
-      <main className={classes.content}>
-        {children}
-        <Footer />
-      </main>
+      <div className={classes.container}>
+        <NavBar
+          className={classes.navBar}
+          onMobileClose={handleNavBarMobileClose}
+          openMobile={openNavBarMobile}
+        />
+        <main className={classes.content}>
+          <Suspense fallback={<LinearProgress />}>{children}</Suspense>
+        </main>
+      </div>
     </div>
-  );
-};
+  )
+}
 
-Main.propTypes = {
-  children: PropTypes.node
-};
+Dashboard.propTypes = {
+  route: PropTypes.object,
+}
 
-export default Main;
+export default Dashboard

@@ -1,0 +1,78 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: #f4f6f8;
+  height: 100%;
+}
+
+a {
+  text-decoration: none;
+}
+
+#root {
+  height: 100%;
+}
+
+body .p-component {
+  font-family: Poppins;
+}
+
+body .p-datatable .p-datatable-thead > tr > th {
+  font-weight: 500;
+  line-height: 1.5rem;
+  font-size: 12px;
+}
+body .p-datatable .p-datatable-tbody > tr:nth-child(even) {
+  background-color: #fff;
+}
+body .p-paginator {
+  background-color: #fff;
+}
+body .p-datatable .p-datatable-header {
+  background-color: #fff;
+}
+body .p-datatable .p-datatable-thead > tr > th {
+  background-color: #fff;
+}
+body .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+  background-color: #0184fe;
+}
+
+body .p-datatable .p-datatable-tbody > tr.p-highlight {
+  background-color: #0184fe;
+}
+
+body .p-datatable .p-datatable-tbody > tr:nth-child(even).p-highlight {
+  background-color: #0184fe;
+}
+
+*:focus {
+  outline-style: none;
+  box-shadow: none;
+  border-color: transparent;
+}
+body .p-link:focus {
+  box-shadow: none;
+}
+body .p-datatable .p-sortable-column.p-highlight {
+  background-color: #0184fe;
+}
+
+body .p-datatable .p-sortable-column:focus {
+  box-shadow: none;
+}
+body .p-inputtext:enabled:focus {
+  outline-style: none;
+  box-shadow: none;
+  border: 1px solid #0184fe;
+}
